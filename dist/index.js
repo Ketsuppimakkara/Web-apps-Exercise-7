@@ -14,6 +14,22 @@ app.get("/", (req, res) => {
 app.get("/hello", (req, res) => {
     res.send("Hello world");
 });
+app.get("/vehicle/search/:model", (req, res) => {
+    if (!req.params.model) {
+        res.status(400).send("Malformed request");
+    }
+    else {
+        const searchedModel = req.params.model;
+        console.log(searchedModel);
+        const vehicle = vehicleList.find(entry => entry.model == searchedModel);
+        if (vehicle != undefined) {
+            res.status(200).send(vehicle);
+        }
+        else {
+            res.status(404).send("No such model found!");
+        }
+    }
+});
 app.post("/vehicle/add", (req, res) => {
     if (!req.body.model || !req.body.color || !req.body.year || !req.body.power) {
         res.status(400).send("Malformed request");
@@ -30,6 +46,8 @@ app.post("/vehicle/add", (req, res) => {
                 wheelCount: req.body.wheelCount
             };
             vehicleList.push(newVehicle);
+            res.status(201).send("Vehicle added");
+            return;
         }
         if (req.body.hasOwnProperty('draft') == true) {
             console.log("its a boat");
@@ -41,6 +59,8 @@ app.post("/vehicle/add", (req, res) => {
                 draft: req.body.draft,
             };
             vehicleList.push(newVehicle);
+            res.status(201).send("Vehicle added");
+            return;
         }
         if (req.body.hasOwnProperty('wingspan') == true) {
             console.log("its a plane");
@@ -52,9 +72,9 @@ app.post("/vehicle/add", (req, res) => {
                 wingspan: req.body.wingspan
             };
             vehicleList.push(newVehicle);
+            res.status(201).send("Vehicle added");
+            return;
         }
-        console.log(vehicleList);
-        res.status(201).send("Vehicle added");
     }
 });
 app.listen(port, () => {
