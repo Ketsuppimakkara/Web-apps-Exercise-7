@@ -1,7 +1,7 @@
 import express, {Express, Request, Response} from "express"
 const app: Express = express()
 const port: Number = 3000
-app.use(express.json())
+
 
 interface Vehicle {
     model: String;
@@ -100,6 +100,7 @@ app.post("/vehicle/add",(req: Request,res: Response) =>{
     }
 })
 
+app.use(express.json())
 app.listen(port, () =>{
     console.log("Server is up and running")
 })
